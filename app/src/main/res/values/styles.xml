@@ -1,7 +1,22 @@
 <resources>
-    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light">
         <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="title">Sudeep Engineering</item>
+        <item name="android:textColorPrimary">#ffffff</item>
+        <item name="android:fontFamily">@font/oswald</item>
+        <item name="actionOverflowButtonStyle">@style/OverFlow</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="OverFlow" parent="@style/Widget.AppCompat.Light.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_baseline_menu_24</item>
+    </style>
+
+    <style name="mainActivity" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">#E3F2FD</item>
+        <item name="colorPrimaryDark">#E3F2FD</item>
+        <item name="colorAccent">#E3F2FD</item>
+        <item name="windowNoTitle">true</item>
     </style>
 </resources>

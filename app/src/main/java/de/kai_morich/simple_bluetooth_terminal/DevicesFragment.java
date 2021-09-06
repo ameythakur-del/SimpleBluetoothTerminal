@@ -87,7 +87,12 @@ public class DevicesFragment extends ListFragment {
             intent.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
             startActivity(intent);
             return true;
-        } else {
+        }
+        else if(id == R.id.bt_aboutUs){
+            startActivity(new Intent(getActivity(), AboutUs.class));
+            return true;
+        }
+        else {
             return super.onOptionsItemSelected(item);
         }
     }
