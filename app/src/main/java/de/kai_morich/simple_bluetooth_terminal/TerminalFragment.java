@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +49,8 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     private boolean hexEnabled = false;
     private boolean pendingNewline = false;
     private String newline = TextUtil.newline_crlf;
+
+    Button a, b, c, d, change;
 
     /*
      * Lifecycle
@@ -132,6 +135,47 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
 
         InputMethodManager imeManager = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
         imeManager.showInputMethodPicker();
+
+        a = view.findViewById(R.id.a);
+        b = view.findViewById(R.id.b);
+        c = view.findViewById(R.id.c);
+        d = view.findViewById(R.id.d);
+        change = view.findViewById(R.id.change);
+
+        a.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendText.setText(a.getText());
+            }
+        });
+
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendText.setText(b.getText());
+            }
+        });
+
+        c.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendText.setText(c.getText());
+            }
+        });
+        d.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendText.setText(d.getText());
+            }
+        });
+
+        change.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager imeManager = (InputMethodManager) service.getApplicationContext().getSystemService(INPUT_METHOD_SERVICE);
+                imeManager.showInputMethodPicker();
+            }
+        });
 
         sendText = view.findViewById(R.id.send_text);
         hexWatcher = new TextUtil.HexWatcher(sendText);
@@ -285,5 +329,4 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         status("connection lost: " + e.getMessage());
         disconnect();
     }
-
 }
