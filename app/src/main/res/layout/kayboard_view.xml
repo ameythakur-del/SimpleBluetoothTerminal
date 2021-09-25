@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:keyPreviewLayout="@layout/key_preview"
     android:layout_alignParentBottom="true"
-    android:background="#000000">
-    <!--android:keyBackground="@drawable/keyb">-->
+    android:background="#E3F2FD"
+    android:keyBackground="@drawable/keyb">
 
 </android.inputmethodservice.KeyboardView>
