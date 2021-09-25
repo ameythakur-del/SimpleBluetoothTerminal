@@ -16,6 +16,7 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.method.ScrollingMovementMethod;
 import android.text.style.ForegroundColorSpan;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -50,7 +51,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     private boolean pendingNewline = false;
     private String newline = TextUtil.newline_crlf;
 
-    Button a, b, c, d, change;
+    Button a, b, c, d,hash,zero,chnage;
 
     /*
      * Lifecycle
@@ -140,7 +141,9 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         b = view.findViewById(R.id.b);
         c = view.findViewById(R.id.c);
         d = view.findViewById(R.id.d);
-        change = view.findViewById(R.id.change);
+        hash=view.findViewById(R.id.hash);
+        zero=view.findViewById(R.id.zero);
+        //change = view.findViewById(R.id.change);
 
         a.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,14 +171,26 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
                 sendText.setText(d.getText());
             }
         });
+        hash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendText.setText(hash.getText());
+            }
+        });
+        zero.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendText.setText(zero.getText());
+            }
+        });
 
-        change.setOnClickListener(new View.OnClickListener() {
+        /*change.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 InputMethodManager imeManager = (InputMethodManager) service.getApplicationContext().getSystemService(INPUT_METHOD_SERVICE);
                 imeManager.showInputMethodPicker();
             }
-        });
+        });*/
 
         sendText = view.findViewById(R.id.send_text);
         hexWatcher = new TextUtil.HexWatcher(sendText);
@@ -225,6 +240,10 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
             sendText.setHint(hexEnabled ? "HEX mode" : "");
             item.setChecked(hexEnabled);
             return true;
+        } else if(id == R.id.chnagekeyboard){
+            InputMethodManager imeManager = (InputMethodManager) service.getApplicationContext().getSystemService(INPUT_METHOD_SERVICE);
+            imeManager.showInputMethodPicker();
+            return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
@@ -237,7 +256,10 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         try {
             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             BluetoothDevice device = bluetoothAdapter.getRemoteDevice(deviceAddress);
-            status("connecting...");
+            //status("Connecting");
+            Toast toast=Toast.makeText(getActivity(), "Connecting", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
             connected = Connected.Pending;
             SerialSocket socket = new SerialSocket(getActivity().getApplicationContext(), device);
             service.connect(socket);
@@ -253,7 +275,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
 
     private void send(String str) {
         if(connected != Connected.True) {
-            Toast.makeText(getActivity(), "not connected", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), ".not connected", Toast.LENGTH_SHORT).show();
             return;
         }
         try {
@@ -309,14 +331,21 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
      */
     @Override
     public void onSerialConnect() {
-        status("connected");
+        //status("Connected");
+        Toast toast=Toast.makeText(getActivity(), "Connected", Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
         connected = Connected.True;
     }
 
     @Override
     public void onSerialConnectError(Exception e) {
-        status("connection failed: " + e.getMessage());
-        disconnect();
+        //status("Connection Failed: " + e.getMessage());
+        Toast toast=Toast.makeText(getActivity(), "Connection Failed", Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
+        //disconnect();
+        connect();
     }
 
     @Override
@@ -326,7 +355,11 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
 
     @Override
     public void onSerialIoError(Exception e) {
-        status("connection lost: " + e.getMessage());
-        disconnect();
+        //status("Connection Lost: " + e.getMessage());
+        Toast toast=Toast.makeText(getActivity(), "Connection Lost", Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
+        //disconnect();
+        connect();
     }
 }

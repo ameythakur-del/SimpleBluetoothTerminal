@@ -71,11 +71,11 @@ public class DevicesFragment extends ListFragment {
     public void onResume() {
         super.onResume();
         if(bluetoothAdapter == null)
-            setEmptyText("<bluetooth not supported>");
+            setEmptyText("BLUETOOTH NOT SUPPORTED");
         else if(!bluetoothAdapter.isEnabled())
-            setEmptyText("<bluetooth is disabled>");
+            setEmptyText("BLUETOOTH IS DISABLED");
         else
-            setEmptyText("<no bluetooth devices found>");
+            setEmptyText("NO BLUETOOTH DEVICES FOUND");
         refresh();
     }
 
@@ -101,7 +101,7 @@ public class DevicesFragment extends ListFragment {
         listItems.clear();
         if(bluetoothAdapter != null) {
             for (BluetoothDevice device : bluetoothAdapter.getBondedDevices())
-                if (device.getType() != BluetoothDevice.DEVICE_TYPE_LE && device.getName().contains("SE"))
+                if (device.getType() != BluetoothDevice.DEVICE_TYPE_LE && device.getName().contains(""))
                     listItems.add(device);
         }
         Collections.sort(listItems, DevicesFragment::compareTo);
