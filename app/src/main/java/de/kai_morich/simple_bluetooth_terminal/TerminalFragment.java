@@ -16,11 +16,13 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.method.ScrollingMovementMethod;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -33,6 +35,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
+import static android.view.MotionEvent.ACTION_BUTTON_PRESS;
 
 public class TerminalFragment extends Fragment implements ServiceConnection, SerialListener {
 
@@ -145,42 +148,52 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         zero=view.findViewById(R.id.zero);
         //change = view.findViewById(R.id.change);
 
-        a.setOnClickListener(new View.OnClickListener() {
+        a.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                sendText.setText(a.getText());
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_BUTTON_PRESS){
+                    Log.d("Amey", "onTouch: ");
+                }
+                return false;
             }
         });
 
-        b.setOnClickListener(new View.OnClickListener() {
+        b.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
-                sendText.setText(b.getText());
+            public boolean onLongClick(View v) {
+                send("B");
+                return false;
             }
         });
 
-        c.setOnClickListener(new View.OnClickListener() {
+        c.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
-                sendText.setText(c.getText());
+            public boolean onLongClick(View v) {
+                send("C");
+                return false;
             }
         });
-        d.setOnClickListener(new View.OnClickListener() {
+
+        d.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
-                sendText.setText(d.getText());
+            public boolean onLongClick(View v) {
+                send("D");
+                return false;
             }
         });
-        hash.setOnClickListener(new View.OnClickListener() {
+
+        hash.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
-                sendText.setText(hash.getText());
+            public boolean onLongClick(View v) {
+                send("#");
+                return false;
             }
         });
-        zero.setOnClickListener(new View.OnClickListener() {
+        zero.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
-                sendText.setText(zero.getText());
+            public boolean onLongClick(View v) {
+                send("0");
+                return false;
             }
         });
 
@@ -293,7 +306,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
             }
             SpannableStringBuilder spn = new SpannableStringBuilder(msg + '\n');
             spn.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorSendText)), 0, spn.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            receiveText.append(spn);
+            receiveText.setText(spn);
             service.write(data);
         } catch (Exception e) {
             onSerialIoError(e);
