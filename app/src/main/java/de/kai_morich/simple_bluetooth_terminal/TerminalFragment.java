@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.text.Editable;
 import android.text.Spannable;
@@ -34,6 +35,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import static android.content.Context.INPUT_METHOD_SERVICE;
 import static android.view.MotionEvent.ACTION_BUTTON_PRESS;
 
@@ -55,6 +59,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     private String newline = TextUtil.newline_crlf;
 
     Button a, b, c, d,hash,zero,chnage;
+    int Acount = 0, Bcount = 0, Ccount = 0, Dcount = 0, Ecount = 0, Zerocount = 0;
 
     /*
      * Lifecycle
@@ -148,53 +153,92 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         zero=view.findViewById(R.id.zero);
         //change = view.findViewById(R.id.change);
 
-        a.setOnTouchListener(new View.OnTouchListener() {
+
+
+      a.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              send("A");
+          }
+      });
+
+        b.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_BUTTON_PRESS){
-                    Log.d("Amey", "onTouch: ");
+            public void onClick(View v) {
+                send("B");
+            }
+        });
+
+        c.setOnTouchListener(new View.OnTouchListener() {
+
+            private Handler mHandler;
+
+            @Override public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        if (mHandler != null) return true;
+                        mHandler = new Handler();
+                        mHandler.postDelayed(mAction, 0);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if (mHandler == null) return true;
+                        mHandler.removeCallbacks(mAction);
+                        mHandler = null;
+                        break;
                 }
                 return false;
             }
+
+            Runnable mAction = new Runnable() {
+                @Override public void run() {
+                    send("C");
+                    Log.d("Amey", "run: ");
+                    mHandler.postDelayed(this, 0);
+                }
+            };
         });
 
-        b.setOnLongClickListener(new View.OnLongClickListener() {
+        d.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
-                send("B");
-                return false;
-            }
-        });
-
-        c.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                send("C");
-                return false;
-            }
-        });
-
-        d.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
+            public void onClick(View v) {
                 send("D");
-                return false;
             }
         });
 
-        hash.setOnLongClickListener(new View.OnLongClickListener() {
+        hash.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public void onClick(View v) {
                 send("#");
-                return false;
             }
         });
-        zero.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                send("0");
+
+        zero.setOnTouchListener(new View.OnTouchListener() {
+
+            private Handler mHandler;
+
+            @Override public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        if (mHandler != null) return true;
+                        mHandler = new Handler();
+                        mHandler.postDelayed(mAction, 0);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if (mHandler == null) return true;
+                        mHandler.removeCallbacks(mAction);
+                        mHandler = null;
+                        break;
+                }
                 return false;
             }
+
+            Runnable mAction = new Runnable() {
+                @Override public void run() {
+                    send("0");
+                    Log.d("Amey", "run: ");
+                    mHandler.postDelayed(this, 0);
+                }
+            };
         });
 
         /*change.setOnClickListener(new View.OnClickListener() {
